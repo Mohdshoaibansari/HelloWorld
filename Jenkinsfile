@@ -13,7 +13,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'mohammad', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                terraform init
+                sh "terraform init"
                     }
             }
         }
@@ -22,7 +22,7 @@ pipeline {
         stage('Plan') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'mohammad', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                    terraform plan
+                   sh "terraform plan"
                     
                 }
             }
@@ -31,7 +31,7 @@ pipeline {
         stage('Apply') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'mohammad', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                    terraform apply
+                   sh "terraform apply"
                     
                 }
             }
