@@ -3,9 +3,11 @@ pipeline {
     stages {
         stage("Build"){
             steps{
+                script{
                 def tfHome = tool name: 'terraform_12_21';\
                 env.PATH = "${tfHome}:${env.PATH}";\
                 env.PATH = "${env.PATH}:/usr/local/bin"
+                }
             }
         
         }
