@@ -1,6 +1,6 @@
 node {
 
-    def tfHome = tool name: 'Terraform', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
+    def tfHome = tool name: 'Terraform'
     env.PATH = "${tfHome}:${env.PATH}"
     env.PATH = "${env.PATH}:/usr/local/bin"
     
