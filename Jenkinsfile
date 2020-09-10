@@ -1,50 +1,22 @@
-pipeline {
-    agent any
-    stages {
-        stage("Build"){
-            steps{
-                script{
-                
-                    terraform
-                }
-            }
-        
-        }
+node {
 
-        stage('Terraform Init') {
-            steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'mohammad', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+    def tfHome = tool name: 'terraform_12_21'
+    env.PATH = "${tfHome}:${env.PATH}"
+    env.PATH = "${env.PATH}:/usr/local/bin"
+    
+    stage("Checkout") {
+        cleanWs()
+
+        //Checkout
+        checkout scm
+    }
+    
+    stage(name: "Terraform initialize") {
+                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'mohammad', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                 sh "terraform init"
                     }
-            }
+            
         }
-        
+}
 
-        stage('Plan') {
-            steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'mohammad', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                   sh "terraform plan"
-                    
-                }
-            }
-        }
-        
-        stage('Apply') {
-            steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'mohammad', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                   sh "terraform apply"
-                    
-                }
-            }
-        }
-                        
-            
-            
-       stage('CleanWorkspace') {
-            steps {
-                cleanWs()
-                }
-                                }
-                                
-        }
-    }
+
