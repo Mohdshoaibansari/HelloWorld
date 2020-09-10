@@ -4,7 +4,8 @@ pipeline {
         stage("Build"){
             steps{
                 script{
-                env.PATH = "${env.PATH}:/usr/local/bin"
+                env.PATH = "${env.PATH}:/usr/local/bin";\
+                    terraform
                 }
             }
         
