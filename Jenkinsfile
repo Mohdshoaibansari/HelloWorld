@@ -8,7 +8,7 @@ node {
             cleanWs()
     
             //Checkout
-            checkout scm
+            //checkout scm
         }
         
 
