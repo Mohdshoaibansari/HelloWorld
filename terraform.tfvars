@@ -7,3 +7,4 @@ vpc = {
 }
 
 routable_vpc_cidr = "10.251.0.0/16"
+region="ap-south-1"
