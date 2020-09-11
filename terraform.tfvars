@@ -6,5 +6,5 @@ vpc = {
   "enable_dns_support"   = "true"
 }
 
-routable_vpc_cidr = "10.251.0.0/16"
+vpc_cidr_blocks = "10.251.0.0/16"
 region="ap-south-1"
