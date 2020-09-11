@@ -12,16 +12,21 @@ node {
         }
         
         stage(name: "Terraform initialize") {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'mohammad', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                sh "terraform init"
-                        }
+               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Mohammad-vpc', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
+                                {
+                                sh "terraform init"
+                                }
+                
+                        
                 
             }
 
         stage(name: "Terraform plan") {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'mohammad', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                sh "terraform plan"
-            }
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Mohammad-vpc', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
+                                {
+                                sh "terraform plan"
+                                }
+                
     
             }
 
