@@ -14,8 +14,9 @@ node {
     stage(name: "Terraform initialize") {
            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'shoaib-vpc', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
                             {
-                            sh "terraform init"
-                            sh "aws s3 ls"
+                            sh "terraform init" \
+                            -backend-config="bucket=alianz657"\
+                            -backend-config="key=networking/terraform.tfstate
                             }
             
                     
