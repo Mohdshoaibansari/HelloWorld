@@ -32,7 +32,7 @@ node {
 
         stage(name: "Terraform Applu") {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'mohammad', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                sh "terraform apply"
+                sh "terraform destroy -force
             }
     
                 }
