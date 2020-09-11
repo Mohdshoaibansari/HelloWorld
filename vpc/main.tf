@@ -1,5 +1,7 @@
 
-
+provider "aws" {
+      region     = "${var.region}"
+}
 # VPC resources: This will create 1 VPC with 4 Subnets, 1 Internet Gateway, 4 Route Tables. 
 
 resource "aws_vpc" "default" {
