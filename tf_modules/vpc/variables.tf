@@ -5,7 +5,7 @@
 ################### CORE VPC VARS #######################
 
 variable "vpc_cidr_blocks" {
-  type        = list(string)
+  type        = string
   description = "The CIDR block for the VPC. Note the first one you define will be the main CIDR block of the VPC and cannot be changed!"
 }
 
