@@ -18,6 +18,7 @@ node {
                              terraform init \
                                 -backend-config="bucket=alianz657" \
                                 -backend-config="key=networking/terraform.tfstate"
+                                -backend-config="region=ap-south-1"
                             """
                             }
             
