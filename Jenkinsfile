@@ -11,29 +11,5 @@ node {
             checkout scm
         }
         
-        stage(name: "Terraform initialize") {
-               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Mohammad-vpc', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
-                                {
-                                sh "terraform init"
-                                }
-                
-                        
-                
-            }
 
-        stage(name: "Terraform plan") {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Mohammad-vpc', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
-                                {
-                                sh "terraform plan"
-                                }
-                
-    
-            }
-
-        stage(name: "Terraform Destroy") {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'mohammad', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                sh "terraform destroy -force
-            }
-    
-                }
     }
