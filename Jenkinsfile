@@ -20,7 +20,7 @@ node {
 
         stage(name: "Terraform plan") {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'mohammad', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                sh "terraform init"
+                sh "terraform plan"
             }
     
             }
