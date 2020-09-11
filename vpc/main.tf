@@ -1,60 +1,92 @@
-/* ====================================================
-## Create a VPC with CIDR Blocks, Subnets, Route Tables and DHCP Config
-## =================================================== */
-
-############################ CORE VPC RESOURCES ##############################
-
-module "vpc_label" {
-  source        = "../../naming_custom"
-  common_naming = module.label.common_naming
-  ext           = var.vpc_ext
-  role          = var.vpc_role
-  service       = var.vpc_service
+provider "aws" {
+      region     = "${var.region}"
+      access_key = "${var.access_key}"
+      secret_key = "${var.secret_key}"
 }
 
-resource "aws_vpc" "main" {
-  cidr_block           = element(var.vpc_cidr_blocks, 0)
-  enable_dns_support   = var.vpc_enable_dns_support
-  enable_dns_hostnames = var.vpc_enable_dns_hostnames
-  tags                 = merge(module.label.tags, module.vpc_label.tags)
+
+# VPC resources: This will create 1 VPC with 4 Subnets, 1 Internet Gateway, 4 Route Tables. 
+
+resource "aws_vpc" "default" {
+  cidr_block           = var.cidr_block
+  enable_dns_support   = true
+  enable_dns_hostnames = true
 }
 
-resource "aws_vpc_ipv4_cidr_block_association" "additional_cidrs" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = element(var.vpc_cidr_blocks, count.index + 1)
-  count      = length(var.vpc_cidr_blocks) - 1
+resource "aws_internet_gateway" "default" {
+  vpc_id = aws_vpc.default.id
 }
 
-# Create if vgw_id is not empty.
-resource "aws_vpn_gateway_attachment" "vpn_attachment" {
-  vpc_id         = aws_vpc.main.id
-  vpn_gateway_id = var.vgw_id
-  count          = var.vgw_id == "" ? 0 : 1
+resource "aws_route_table" "private" {
+  count = length(var.private_subnet_cidr_blocks)
+
+  vpc_id = aws_vpc.default.id
 }
 
-################################ DHCP CONFIG ################################
+resource "aws_route" "private" {
+  count = length(var.private_subnet_cidr_blocks)
 
-module "dhcp_label" {
-  source        = "../../naming_custom"
-  common_naming = module.label.common_naming
-  ext           = var.dhcp_ext
-  role          = var.dhcp_role
-  service       = var.dhcp_service
+  route_table_id         = aws_route_table.private[count.index].id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.default[count.index].id
 }
 
-resource "aws_vpc_dhcp_options" "dhcp" {
-  domain_name          = var.dhcp_domain_name
-  domain_name_servers  = split(",", var.dhcp_domain_name_servers)
-  ntp_servers          = split(",", var.dhcp_ntp_servers)
-  netbios_name_servers = split(",", var.dhcp_netbios_name_servers)
-  netbios_node_type    = var.dhcp_netbios_node_type
-  tags                 = merge(module.label.tags, module.dhcp_label.tags)
-  count                = var.configure_dhcp ? 1 : 0
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.default.id
 }
 
-resource "aws_vpc_dhcp_options_association" "dns_resolver" {
-  vpc_id          = aws_vpc.main.id
-  dhcp_options_id = aws_vpc_dhcp_options.dhcp[0].id
-  count           = var.configure_dhcp ? 1 : 0
+resource "aws_route" "public" {
+  route_table_id         = aws_route_table.public.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.default.id
 }
 
+resource "aws_subnet" "private" {
+  count = length(var.private_subnet_cidr_blocks)
+
+  vpc_id            = aws_vpc.default.id
+  cidr_block        = var.private_subnet_cidr_blocks[count.index]
+  availability_zone = var.availability_zones[count.index]
+}
+
+resource "aws_subnet" "public" {
+  count = length(var.public_subnet_cidr_blocks)
+
+  vpc_id                  = aws_vpc.default.id
+  cidr_block              = var.public_subnet_cidr_blocks[count.index]
+  availability_zone       = var.availability_zones[count.index]
+  map_public_ip_on_launch = true
+}
+
+resource "aws_route_table_association" "private" {
+  count = length(var.private_subnet_cidr_blocks)
+
+  subnet_id      = aws_subnet.private[count.index].id
+  route_table_id = aws_route_table.private[count.index].id
+}
+
+resource "aws_route_table_association" "public" {
+  count = length(var.public_subnet_cidr_blocks)
+
+  subnet_id      = aws_subnet.public[count.index].id
+  route_table_id = aws_route_table.public.id
+}
+
+
+# NAT resources: This will create 2 NAT gateways in 2 Public Subnets for 2 different Private Subnets.
+
+resource "aws_eip" "nat" {
+  count = length(var.public_subnet_cidr_blocks)
+
+  vpc = true
+}
+
+resource "aws_nat_gateway" "default" {
+  depends_on = ["aws_internet_gateway.default"]
+
+  count = length(var.public_subnet_cidr_blocks)
+
+  allocation_id = aws_eip.nat[count.index].id
+  subnet_id     = aws_subnet.public[count.index].id
+}
+ 
