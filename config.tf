@@ -1,8 +1,8 @@
 provider "aws" {
-  region  = "us-east-1"
+  region  = "ap-south-1"
 }
 resource "aws_s3_bucket_object" "object1" {
-  bucket  = "yak-forsok"
+  bucket  = "alianz657"
   key     = "arch/three_gossips/turret"
   content = "Delicate"
 }
