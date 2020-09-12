@@ -5,4 +5,5 @@ module "main_vpc" {
   vpc_enable_dns_hostnames = var.vpc["enable_dns_hostnames"]
   vpc_enable_dns_support   = var.vpc["enable_dns_support"]
   vpc_cidr_blocks_add      = var.vpc_cidr_blocks_add
+  project                  = var.project 
 }
