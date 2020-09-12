@@ -11,7 +11,6 @@ node {
         checkout scm
     }
     
-    
     stage(name: "Terraform initialize") {
            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'shoaib-vpc', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
                             {
@@ -23,16 +22,26 @@ node {
                             """
                             } 
         }
-
-    stage(name: "Terraform Destroy") {
+    
+    stage(name: "Terraform Plan") {
            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'shoaib-vpc', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
                             {
                             sh """
-                             terraform destroy -auto-approve
+                             set +e -x
+                             terraform plan \
+                             -var="project=Staging"
+                            """
+                            } 
+        }
+
+    stage(name: "Terraform Apply") {
+           withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'shoaib-vpc', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
+                            {
+                            sh """
+                             terraform apply -auto-approve
                             """
                             } 
         }
 
 
 }
-
