@@ -4,5 +4,5 @@ module "main_vpc" {
   vpc_cidr_blocks          = var.vpc_cidr_blocks
   vpc_enable_dns_hostnames = var.vpc["enable_dns_hostnames"]
   vpc_enable_dns_support   = var.vpc["enable_dns_support"]
-  vpc_cidr_blocks_add      =var.vpc_cidr_blocks_add
+  vpc_cidr_blocks_add      = var.vpc_cidr_blocks_add
 }
