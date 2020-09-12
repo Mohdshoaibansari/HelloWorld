@@ -19,6 +19,12 @@ variable "vpc_enable_dns_support" {
   description = "A boolean flag to enable/disable DNS hostnames in the VPC. Defaults false."
 }
 
+variable "vpc_cidr_blocks_add" {
+  type        = string
+  description = "The CIDR block for the VPC. Note the first one you define will be the main CIDR block of the VPC and cannot be changed!"
+}
+
+
 # variable "vgw_id" {
 #   type    = string
 #   default = ""

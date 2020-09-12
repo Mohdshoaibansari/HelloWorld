@@ -8,3 +8,4 @@ vpc = {
 
 vpc_cidr_blocks = "10.251.0.0/16"
 region="ap-south-1"
+vpc_cidr_blocks_add="44.0.0.0/24"

@@ -19,11 +19,11 @@ resource "aws_vpc" "main" {
   #tags                 = merge(module.label.tags, module.vpc_label.tags)
 }
 
-# resource "aws_vpc_ipv4_cidr_block_association" "additional_cidrs" {
-#   vpc_id     = aws_vpc.main.id
-#   cidr_block = element(var.vpc_cidr_blocks, count.index + 1)
-#   count      = length(var.vpc_cidr_blocks) - 1
-# }
+resource "aws_vpc_ipv4_cidr_block_association" "additional_cidrs" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = var.vpc_cidr_blocks_add
+  # count      = length(var.vpc_cidr_blocks) - 1
+}
 
 # Create if vgw_id is not empty.
 # resource "aws_vpn_gateway_attachment" "vpn_attachment" {
