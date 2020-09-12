@@ -19,7 +19,6 @@ node {
                                 -backend-config="bucket=alianz657" \
                                 -backend-config="key=networking/terraform.tfstate" \
                                 -backend-config="region=ap-south-1" \
-                                -backend-config="project=Staging"
                             """
                             } 
         }
@@ -29,7 +28,8 @@ node {
                             {
                             sh """
                              set +e -x
-                             terraform plan
+                             terraform plan \
+                             -var='project=Staging'
                             """
                             } 
         }
