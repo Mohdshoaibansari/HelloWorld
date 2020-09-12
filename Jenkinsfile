@@ -29,7 +29,7 @@ node {
                             sh """
                              set +e -x
                              terraform plan \
-                             -var="project=Staging"
+                             -var="global_project=Staging"
                             """
                             } 
         }
