@@ -28,7 +28,7 @@ node {
                             {
                             sh """
                              set +e -x
-                             terraform plan
+                             terraform plan -auto-approve
                             """
                             } 
         }
