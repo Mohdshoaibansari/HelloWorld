@@ -32,14 +32,14 @@ node {
                             } 
         }
 
-    //stage(name: "Terraform plan") {
-      //      withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'shoaib-vpc', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
-        //                    {
-          //                  sh "terraform plan"
-            //                }
-            
-
-        //}
+    stage(name: "Terraform Apply") {
+           withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'shoaib-vpc', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
+                            {
+                            sh """
+                             terraform apply 
+                            """
+                            } 
+        }
 
 
 }
