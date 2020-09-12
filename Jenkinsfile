@@ -27,7 +27,7 @@ node {
            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'shoaib-vpc', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
                             {
                             sh """
-                             set +e
+                             set +e -x
                              terraform plan
                             """
                             } 
